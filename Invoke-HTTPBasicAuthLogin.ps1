@@ -78,6 +78,7 @@
 	http://192.168.1.11:8080/jmx-console/                    admin                               admin    
 		
 #>
+[CmdletBinding(DefaultParameterSetName="Tomcat")]
 Param(
 		[Parameter(Mandatory=$false,
 		HelpMessage='Provide a list of computers and ports in format IP:PORT, example: C:\Temp\hosts.txt')]
@@ -86,7 +87,7 @@ Param(
 
 		[Parameter(Mandatory=$false,
 		HelpMessage='Provide a Computer to test for, attempts to ping to validate connection')]
-        	#[ValidateScript({Test-Connection -quiet -count 1 -ComputerName $_})]
+        #[ValidateScript({Test-Connection -quiet -count 1 -ComputerName $_})]
 		[string]$Computer = $null,
 
 		[Parameter(Mandatory=$false,
