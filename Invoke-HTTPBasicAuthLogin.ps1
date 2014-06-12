@@ -86,7 +86,7 @@ Param(
 	    	[Parameter(ParameterSetName = "IgnoreSSL")]
 		[switch]$IgnoreSSL,
 		
-		[Parameter(ParameterSetName = BigDictionary)]
+		[Parameter(ParameterSetName = "BigDictionary")]
 		[switch]$BigDictionary
 
         	[Parameter(Mandatory=$false,
