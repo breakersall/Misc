@@ -4,7 +4,7 @@
 	The dictionary and configuration by default is set to attempt to loging to Tomcat servers
 	using a dictionary of default usernames and passwords. This can be configurable in the parameters.
         Tomcat by default ships with very easy to guess manager interface passwords, and the manager 
-        interface is rarely disabled..
+        interface is rarely disabled...Leading to a shell party.
 
 	Function: Invoke-HTTPBasicAuthLogin
 	Author: Matt Kelly
@@ -16,7 +16,7 @@
 
 	.PARAMETER Computer
 
-	Specify a single tomcat web server to test against in the form, IP:PORT, example: 192.168.1..
+	Specify a single tomcat web server to test against in the form, IP:PORT, example: 192.168.1.10:8080
 	
 	.PARAMETER UserName
 
@@ -35,7 +35,7 @@
 	Ignore bad SSL certificates switch -IgnoreSSL.
 	
 	.PARAMETER BigDictionary
-	Use the larger dictionary by default.
+	Use the larger dictionary of tomcat usernames and passwords
 		
 	.EXAMPLE
 
@@ -72,7 +72,7 @@ Param(
 		
 		[Parameter(Mandatory=$false,
 		HelpMessage='Provide a Computer to test for, attempts to ping to validate connection')]
-        #[ValidateScript({Test-Connection -quiet -count 1 -ComputerName $_})]
+        	#[ValidateScript({Test-Connection -quiet -count 1 -ComputerName $_})]
 		[string]$Computer = $null,
 		
 		[Parameter(Mandatory=$false,
