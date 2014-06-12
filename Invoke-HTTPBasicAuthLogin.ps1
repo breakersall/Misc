@@ -7,7 +7,7 @@
         interface is rarely disabled...Leading to a shell party.
 
 	Function: Invoke-HTTPBasicAuthLogin
-	Author: Matt Kelly
+	Author: Matt Kelly, @breakersall
 	Required Dependencies: PSv3
 
 	.PARAMETER File
