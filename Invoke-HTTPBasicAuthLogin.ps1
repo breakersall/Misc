@@ -93,7 +93,7 @@ Param(
 		HelpMessage='Optionally provide the user password if performing authenticated enumeration')]
 		[string]$URIPath = "/manager/html"
 	)
-Function Invoke-TomcatLogin
+Function Invoke-HttpBasicAuthLogin
 {
 #Build arrays of default usernames and passwords, passwords based of many lists including Metasploit and custom
 if(!$UserName)
