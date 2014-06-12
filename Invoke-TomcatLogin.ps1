@@ -61,7 +61,7 @@
 [CmdletBinding(DefaultParameterSetName="AnonymousEnumeration")]
 Param(
 		[Parameter(Mandatory=$false,
-		HelpMessage='Provide a list of domain controllers in a text file (line deliminated) with the path (or local), example: Z:\Discovery\DomainControllers.txt')]
+		HelpMessage='Provide a list of computers and ports in format IP:PORT, example: C:\Temp\hosts.txt')]
 		[ValidateScript({Test-Path $_})]
 		[string]$File,
 		
