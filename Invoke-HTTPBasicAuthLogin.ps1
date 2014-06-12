@@ -68,31 +68,7 @@
 	[+]Success on host http://192.168.1.11:8080/jmx-console/ with Username: admin and Password admin
 	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: admin,password
 	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: admin,tomcat
-	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: admin,manager
-	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: admin,j2deployer
-	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: tomcat,
-	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: tomcat,admin
-	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: tomcat,password
-	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: tomcat,tomcat
-	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: tomcat,manager
-	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: tomcat,j2deployer
-	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: administrator,
-	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: administrator,admin
-	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: administrator,password
-	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: administrator,tomcat
-	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: administrator,manager
-	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: administrator,j2deployer
-	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: manager,
-	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: manager,admin
-	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: manager,password
-	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: manager,tomcat
-	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: manager,manager
-	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: manager,j2deployer
-	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: j2deployer,
-	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: j2deployer,admin
-	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: j2deployer,password
-	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: j2deployer,tomcat
-	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: j2deployer,manager
+	<-- TRIMMED -->
 	[-]Bad username and password on http://192.168.1.11:8080/jmx-console/ with: j2deployer,j2deployer
 	
 	Successfull Login:
