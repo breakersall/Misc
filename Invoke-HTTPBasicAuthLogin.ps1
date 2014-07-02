@@ -136,13 +136,13 @@ Param(
 if(!$UserName)
 {
     if ($UserNameFile) { [array]$UserName = Get-Content $UserNameFile }
-    elseif ($BigDictionary) { [array]$UserName = "admin","tomcat","administrator","manager","j2deployer","ovwebusr","cxsdk","root","xampp","ADMIN","testuser" }
+    elseif ($BigDictionary) { [array]$UserName = "admin","tomcat","administrator","manager","j2deployer","ovwebusr","cxsdk","root","xampp","ADMIN","testuser","cragigmcc" }
     else { [array]$UserName = "admin","tomcat","administrator","manager","j2deployer" }
 }
 if (!$Password)
 {
     if ($PasswordFile) { [array]$Password = Get-Content $PasswordFile }
-    elseif ($BigDictionary) { [array]$Password = "","admin","password","tomcat","manager","j2deployer","OvW*busr1","kdsxc","owaspbwa","ADMIN","xampp","s3cret","Password1","testuser","redi_123" }
+    elseif ($BigDictionary) { [array]$Password = "","admin","password","tomcat","manager","j2deployer","OvW*busr1","kdsxc","owaspbwa","ADMIN","xampp","s3cret","Password1","testuser","redi_123","secret" }
     else { [array]$Password = "","admin","password","tomcat","manager","j2deployer" }
 }
 #Ignore SSL From http://connect.microsoft.com/PowerShell/feedback/details/419466/new-webserviceproxy-needs-force-parameter-to-ignore-ssl-errors thanks @Mattifestation and HaIR
