@@ -1,6 +1,7 @@
 <#
  	.SYNOPSIS
 	This script parses NMAP ping sweeps into /24 network blocks and removes duplicate values.
+	This script requires PoshSec-Mod installed, available at: https://github.com/darkoperator/Posh-SecMod
 
 	Function: Get-ICMPSubnets
 	Author: Matt Kelly, @breakersall
