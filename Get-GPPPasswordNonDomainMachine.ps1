@@ -258,7 +258,7 @@ elseif ($UserName -and $Password)
 			{
 				#discover potential files containing passwords ; not complaining in case of denied access to a directory
 				Write-Verbose 'Searching the DC. This could take a while.'
-				$XMlFiles = Get-ChildItem -Path "\\$DOMAIN\SYSVOL" -Recurse -ErrorAction SilentlyContinue -Include 'Groups.xml','Services.xml','Scheduledtasks.xml','DataSources.xml','Printers.xml','Drives.xml'
+				$XMlFiles = Get-ChildItem -Path "\\$Domain\SYSVOL" -Recurse -ErrorAction SilentlyContinue -Include 'Groups.xml','Services.xml','Scheduledtasks.xml','DataSources.xml','Printers.xml','Drives.xml'
 				
 				if ( -not $XMlFiles ) {throw 'No preference files found.'}
 
