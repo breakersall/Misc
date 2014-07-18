@@ -10,7 +10,7 @@
 	Author: Matt Kelly, @breakersall
 	Required Dependencies: PSv3
 
-	.PARAMETER File
+	.PARAMETER Hosts
 
 	Specify a file with hosts:ports to test against, example: C:\Temp\hosts.txt.
 
@@ -92,45 +92,51 @@
 	http://192.168.1.11:8080/jmx-console/                    admin                               admin    
 		
 #>
-[CmdletBinding(DefaultParameterSetName="Tomcat")]
+[CmdletBinding()]
 Param(
 		[Parameter(Mandatory=$false,
-		HelpMessage='Provide a list of computers and ports in format IP:PORT, example: C:\Temp\hosts.txt')]
+                   ParameterSetName = "All",
+                   ValueFromPipelineByPropertyName=$true,
+				   Position=0)]
 		[ValidateScript({Test-Path $_})]
 		[string]$File,
+		
+		[Parameter(Mandatory=$false,
+                   ParameterSetName = "All",
+                   ValueFromPipelineByPropertyName=$true)]
+		[string]$Computer,
 
 		[Parameter(Mandatory=$false,
-		HelpMessage='Provide a Computer to test for, attempts to ping to validate connection')]
-        [ValidateScript({Test-Connection -quiet -count 1 -ComputerName $_.Split(":")[0]})]
-		[string]$Computer = $null,
-
-		[Parameter(Mandatory=$false,
-		HelpMessage='Optionally provide a single custom user')]
+                   ParameterSetName = "All",
+                   ValueFromPipelineByPropertyName=$true)]
 		[string]$UserName,
 
 		[Parameter(Mandatory=$false,
-		HelpMessage='Optionally provide a single custom password')]
+                   ParameterSetName = "All",
+                   ValueFromPipelineByPropertyName=$true)]
 		[string]$Password,
 
 		[Parameter(Mandatory=$false,
-		HelpMessage='Optionally provide a custom user list, otherwise defaults to a builtin dictionary')]
+                   ParameterSetName = "All",
+                   ValueFromPipelineByPropertyName=$true)]
 		[ValidateScript({Test-Path $_})]
         [string]$UserNameFile,
 
 		[Parameter(Mandatory=$false,
-		HelpMessage='Optionally provide a custom password list, otherwise defaults to a builtin dictionary')]
+                   ParameterSetName = "All",
+                   ValueFromPipelineByPropertyName=$true)]
+		[string]$URIPath = "/manager/html",
+		
+		[Parameter(Mandatory=$false,
+                   ParameterSetName = "All",
+                   ValueFromPipelineByPropertyName=$true)]
         [ValidateScript({Test-Path $_})]		
         [string]$PasswordFile,
 
-	    [Parameter(ParameterSetName = "IgnoreSSL")]
 		[switch]$IgnoreSSL,
 
-		[Parameter(ParameterSetName = "BigDictionary")]
-		[switch]$BigDictionary,
+        [Switch]$BigDictionary
 
-        [Parameter(Mandatory=$false,
-		HelpMessage='Optionally provide the user URI string, otherwise defaults to tomcat: /manager/html')]
-		[string]$URIPath = "/manager/html"
 	)
 #Build arrays of default usernames and passwords, passwords based of many lists including Metasploit and custom
 if(!$UserName)
@@ -169,7 +175,8 @@ if (!$Computer)
     
     if ($File)
     {
-        [array]$Computer = Get-Content $File
+        write-host "test"
+		[array]$Computer = Get-Content $File
     }
     else
     {
