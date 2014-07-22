@@ -37,7 +37,7 @@ foreach ($Network in $Networks)
 }
 if ($SavePath)
 {
-	$Subnets | Get-Unique | Out-File -Path $SavePath
+	$Subnets | Get-Unique | Out-File -File $SavePath
 }
 else
 {

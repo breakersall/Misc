@@ -241,7 +241,6 @@ if ($Cpassword)
             $ResultsObject = New-Object -TypeName PSObject -Property $ObjectProperties
             Write-Verbose "The password is between {} and may be more than one value."
             if ($ResultsObject) {Return $ResultsObject} 
-        }
 }
 elseif ($UserName -and $Password)
 {
