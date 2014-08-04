@@ -16,30 +16,33 @@
 	Optionally specify a file to save the documents to, example: C:\Temp\subnets.txt
 		
 #>
-[CmdletBinding()]
-Param(
-		[Parameter(Mandatory=$false,
-		HelpMessage='Provide a directory for, example: C:\Temp')]
-        [ValidateScript({Test-Path $_})]
-		[string]$XMLPath = (Get-Location),
-		
-		[Parameter(Mandatory=$false,
-		HelpMessage='Provide a Computer to test for, attempts to ping to validate connection')]
-		[string]$SavePath
-	)
-$Networks = @()
-$Subnets = @()
-$Files = Get-ChildItem $XMLPath\*.xml
-foreach ($File in $Files){ $Networks += Import-NMapXML -NMapXML $File -InfoType hosts | Select-Object -ExpandProperty IPv4Address}
-foreach ($Network in $Networks)
+function get-ICMPSubnets
 {
-    $Subnets += [string]([ipaddress] "$Network").GetAddressBytes()[0] + "." + [string]([ipaddress] "$Network").GetAddressBytes()[1] + "." + [string]([ipaddress] "$Network").GetAddressBytes()[2] + ".0/24"
-}
-if ($SavePath)
-{
-	$Subnets | Get-Unique | Out-File -File $SavePath
-}
-else
-{
-	$Subnets | Get-Unique 
+	[CmdletBinding()]
+	Param(
+			[Parameter(Mandatory=$false,
+			HelpMessage='Provide a directory for, example: C:\Temp')]
+			[ValidateScript({Test-Path $_})]
+			[string]$XMLPath = (Get-Location),
+			
+			[Parameter(Mandatory=$false,
+			HelpMessage='Provide a Computer to test for, attempts to ping to validate connection')]
+			[string]$SavePath
+		)
+	$Networks = @()
+	$Subnets = @()
+	$Files = Get-ChildItem $XMLPath\*.xml
+	foreach ($File in $Files){ $Networks += Import-NMapXML -NMapXML $File -InfoType hosts | Select-Object -ExpandProperty IPv4Address}
+	foreach ($Network in $Networks)
+	{
+		$Subnets += [string]([ipaddress] "$Network").GetAddressBytes()[0] + "." + [string]([ipaddress] "$Network").GetAddressBytes()[1] + "." + [string]([ipaddress] "$Network").GetAddressBytes()[2] + ".0/24"
+	}
+	if ($SavePath)
+	{
+		$Subnets | Get-Unique | Out-File -File $SavePath
+	}
+	else
+	{
+		$Subnets | Get-Unique 
+	}
 }
