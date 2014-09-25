@@ -35,13 +35,14 @@ Param(
 
 		[Parameter(Mandatory=$false,
 		HelpMessage='Specify the output file, example -Output local_admins.csv')]
-		[string]$Output,
+		[string]$Output
 	)
 
 $Files = Get-ChildItem $Directory\*$Extension | Select-Object -ExpandProperty Name
 	
 foreach ($File in $Files) 
 {
+	cd $Directory
 	$admins = get-content $File
 	[string]$line2
 	$Compname = $File.replace("$Extension","")
