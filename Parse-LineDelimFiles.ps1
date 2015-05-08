@@ -43,7 +43,7 @@ $Files = Get-ChildItem $Directory\*$Extension | Select-Object -ExpandProperty Na
 foreach ($File in $Files) 
 {
 	cd $Directory
-	$admins = get-content $File
+	$admins = get-content $Directory\$File
 	[string]$line2
 	$Compname = $File.replace("$Extension","")
 	foreach ($admin in $admins)

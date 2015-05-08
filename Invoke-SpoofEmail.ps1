@@ -15,7 +15,7 @@
 
 .EXAMPLE
 
-    PS C:\>Invoke-SpoofEmail -ToClientAddress CLIENTAddress1@CLIENTDOMAIN.com -FromClientAddress CLIENTAddress2@CLIENTDOMAIN.com -Domains domain-list.txt -ToYourEmailAddress mattkelly123@gmail.com
+    PS C:\>Invoke-SpoofEmail -ToClientAddress CLIENTAddress1@CLIENTDOMAIN.com -FromClientAddress CLIENTAddress2@CLIENTDOMAIN.com -Domains domain-list.txt -ToYourEmailAddress test@example.com
 	
 #>
 Function Invoke-SpoofEmail
