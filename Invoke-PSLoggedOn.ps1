@@ -861,7 +861,6 @@ function Get-LoggedOnLocal {
 
         # process multiple host object types from the pipeline
         $ComputerName = Get-NameField -Object $ComputerName
-		Write-Host "$ComputerName"
 		# retrieve HKU remote registry values
 		$Reg = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey('Users', "$ComputerName")
         
@@ -940,10 +939,10 @@ function Invoke-PSLoggedOn {
 		$LoggedOnLocal = Get-LoggedOnLocal $ComputerName
 		$NetSessionUsers = Get-NetSession $ComputerName
 		
-		Write-Host "Users logged on locally:"
+		Write-Host "Users logged on locally to $ComputerName:"
 		$LoggedOnLocal
 		Write-Host ""
-		Write-Host "Users logged on via resource shares:"
+		Write-Host "Users logged on via resource shares to $ComputerName:"
 		$NetSessionUsers
     }
 }
