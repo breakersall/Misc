@@ -939,10 +939,10 @@ function Invoke-PSLoggedOn {
 		$LoggedOnLocal = Get-LoggedOnLocal $ComputerName
 		$NetSessionUsers = Get-NetSession $ComputerName
 		
-		Write-Host "Users logged on locally to $ComputerName:"
+		Write-Host "Users logged on locally to $ComputerName :"
 		$LoggedOnLocal
 		Write-Host ""
-		Write-Host "Users logged on via resource shares to $ComputerName:"
+		Write-Host "Users logged on via resource shares to $ComputerName :"
 		$NetSessionUsers
     }
 }
